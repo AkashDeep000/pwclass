@@ -18,7 +18,7 @@ export default function Home({data}) {
   return (
     <>
     <Header/>
-    <div className="text-center w-full text-3xl font-bold text-slate-600 p-2 mt-4">Subjects</div>
+    <div className="text-center w-full text-3xl font-bold text-slate-600 p-2 mt-4">Videos To Download</div>
     <div className="grid p-3 gap-6 shadow-2xl">
     {data.data.data.map((el, i) => (
     <div key={i} >
