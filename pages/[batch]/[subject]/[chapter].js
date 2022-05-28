@@ -58,7 +58,7 @@ export const getServerSideProps = async ({ req, res, params}) => {
    })
  const result = await data.json()
  //console.log(result)
- if (batches?.success == true) {
+ if (result?.success == true) {
    
  if (currentPage === 1) {
    batches = result
