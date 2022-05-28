@@ -14,7 +14,10 @@ export default function Home({data}) {
     {data.data.data.map((el, i) => (
     <div key={i} >
     <Link href={`/${el._id}`}>
-    <img className="rounded w-full aspect-video" src={el.previewImage.baseUrl + el.previewImage.key}/>
+    <Image
+    width={1600}
+    height={900}
+       className="rounded w-full aspect-video" src={el.previewImage.baseUrl + el.previewImage.key}/>
 </Link>
     </div>
     

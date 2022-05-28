@@ -61,13 +61,16 @@ export const getServerSideProps = async ({ req, res, params}) => {
  
  if (currentPage === 1) {
    batches = result
-   totalPage = (Math.ceil(result.paginate.totalCount / result.paginate.limit))
+if (result.success) {
+  totalPage = (Math.ceil(result.paginate.totalCount / result.paginate.limit))
    currentPage++
+}
+   
  } else if (currentPage > 1) {
    batches.data.push(...result.data)
    currentPage++
  }
- if (currentPage <= totalPage) {
+ if (currentPage <= totalPage & result.success) {
    await getBatches()
  }
  

@@ -3,14 +3,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { uid } from 'uid';
 import axios from "axios"
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import {useState} from "react"
+
+import {useState, useRef} from "react"
+
 //import getDownLink from "../../../util/getDownLink"
 import { getCookie, removeCookies } from 'cookies-next'
 import styles from '../../../styles/Home.module.css'
 import Header from '../../../components/Header'
+import DownCard from '../../../components/DownCard'
 export default function Home({data}) {
-  const [isCopy, setIsCopy] = useState(false)
+  
+  
  //console.log(data.data.data[0].videoDetails)
   return (
     <>
@@ -21,15 +24,10 @@ export default function Home({data}) {
     <div key={i} >
 
     <div className="rounded w-full p-2 bg-slate-100 grid place-items-center">
-     <img className="w-full rounded aspect-video" src={el.videoDetails.image}/>
+       <img className="w-full rounded aspect-video" src={el.videoDetails.image}/>
        <div className="rounded w-full pt-4 p-2 bg-slate-100 grid gap-4 grid-cols-[1fr_7rem] place-items-center">
     <p className="w-full text font-bold text-slate-600">{el.topic}</p>
-    <CopyToClipboard text={el.videoDetails.downLink}
-    onCopy={() => setIsCopy(true)}>
-  <button className="bg-white w-full text-sky-400 p-2 text-xl rounded">
-  {!isCopy ? "Copy Link" : "Copied"}
-  </button>
-</CopyToClipboard>
+    <DownCard text={el.videoDetails.downLink}/>
     </div>
     
     </div>
@@ -60,6 +58,8 @@ export const getServerSideProps = async ({ req, res, params}) => {
    })
  const result = await data.json()
  //console.log(result)
+ if (batches?.success == true) {
+   
  if (currentPage === 1) {
    batches = result
    totalPage = (Math.ceil(result.paginate.totalCount / result.paginate.limit))
@@ -71,7 +71,9 @@ export const getServerSideProps = async ({ req, res, params}) => {
  if (currentPage <= totalPage) {
    await getBatches()
  }
- 
+ } else {
+   batches = result
+ }
    } 
 await getBatches();
 
@@ -96,7 +98,7 @@ const getDownLink = async (url) => {
   console.log(result)
   return `${url.replace(".mpd",".m3u8")}${result.data}`
 }
-
+if (batches?.success) {
 const total = batches.data.length
 let completed = 0
 const getDownLinkLoop = async () => {
@@ -106,10 +108,12 @@ const getDownLinkLoop = async () => {
     getDownLinkLoop()
   }
 }
+ 
 await getDownLinkLoop()
+}
 
 
- console.log(batches.data[0].videoDetails)
+ //console.log(batches.data[0].videoDetails)
  let haveToReturn = { props: {}};
  if (batches.error?.status == 401) {
    removeCookies('access_token', { req, res})
