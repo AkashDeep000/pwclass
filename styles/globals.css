@@ -1,16 +1,37 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@layer base {
+  body {
+    @apply bg-slate-200;
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 
-* {
-  box-sizing: border-box;
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  *, *::after, *::before {
+    @apply box-border;
+  }
+
+  .bar {
+    @apply bg-sky-500 fixed top-0 left-0 z-50 w-full h-1;
+
+  }
+
+  /* Fancy blur effect */
+  .peg {
+    @apply block absolute right-0 h-full w-24 shadow-md shadow-sky-500 rotate-3 translate-y-[-.25rem];
+  }
 }
