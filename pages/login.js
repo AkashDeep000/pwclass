@@ -68,7 +68,7 @@ export default function Home() {
     <button 
     onClick={handleOtpClick}
     style={number?.length === 10 ? {background:"#00bae8"} : null}
-    className="bg-sky-300 text-white p-3 mx-24 text-xl my-4 rounded">Get OTP</button>
+    className="bg-sky-300 text-white p-3 mx-24 text-xl rounded">Get OTP</button>
     </div>
     <div style={!isOtpSend ? {display: "none"}: null}>
         <label className="w-full text-xl block text-sky-500">

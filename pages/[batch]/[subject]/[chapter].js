@@ -102,17 +102,24 @@ const getDownLink = async (url) => {
 if (batches?.success) {
 const total = batches.data.length
 let completed = 0
-const getDownLinkLoop = async () => {
-  batches.data[completed].videoDetails.downLink = await getDownLink(batches.data[completed].videoDetails.videoUrl)
-  completed++
-  if (completed < total) {
-   await getDownLinkLoop()
-  }
-}
- 
-await getDownLinkLoop()
+
+await Promise.all(batches.data.map(async (el,i) => {
+  const res = await getDownLink(el.videoDetails.videoUrl)
+  batches.data[i].videoDetails.downLink = res
+}));
+/*
+ function getDownLinkLoop(){
+ batches.data.forEach((el,i) => {
+ console.log(el.videoDetails.videoUrl)
+  
+  const res = getDownLink(el.videoDetails.videoUrl)
+    batches.data[i].videoDetails.downLink = res
+})
 }
 
+await getDownLinkLoop()
+*/
+}
 
  //console.log(batches.data[0].videoDetails)
  let haveToReturn = { props: {}};
