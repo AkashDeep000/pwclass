@@ -12,6 +12,8 @@ import Header from '../components/Header'
 export default function Home() {
   const [number,setNumber] = useState()
   const [otp,setOtp] = useState()
+  const [submitText,setSubmitText] = useState("Submit")
+  const [otpText,setOtpText] = useState("Get OTP")
   const [isOtpSend, setIsOtpSend] = useState(false)
   const [isOtpVer, setIsOtpVer] = useState(false)
   const router = useRouter()
@@ -20,7 +22,7 @@ export default function Home() {
     console.log("Clicked for Otp")
     if (number?.length == 10) {
       console.log(10)
-    
+    setOtpText("Wait...")
     const otpRes = await axios({
       method: 'post',
   url: "/api/otp",
@@ -29,6 +31,8 @@ export default function Home() {
     if (otpRes.data.success) {
       setIsOtpSend(true)
       console.log("Otp Send Successfull")
+    } else {
+      setOtpText("Get OTP")
     }
     }
   }
@@ -37,7 +41,7 @@ export default function Home() {
     console.log("Verifying OTP")
     if (otp?.length === 6) {
       console.log(6)
-  
+  setSubmitText("Verifying...")
     const otpRes = await axios({
       method: 'post',
   url: "/api/token",
@@ -48,6 +52,8 @@ export default function Home() {
       console.log("Login Successfull")
       await setCookies('access_token', otpRes.data.data.access_token)
       router.push("/")
+    } else {
+      setSubmitText("Submit")
     }
     }
   }
@@ -68,7 +74,7 @@ export default function Home() {
     <button 
     onClick={handleOtpClick}
     style={number?.length === 10 ? {background:"#00bae8"} : null}
-    className="bg-sky-300 text-white p-3 mx-24 text-xl rounded">Get OTP</button>
+    className="bg-sky-300 text-white p-3 text-xl rounded w-32">{otpText}</button>
     </div>
     <div style={!isOtpSend ? {display: "none"}: null}>
         <label className="w-full text-xl block text-sky-500">
@@ -81,7 +87,7 @@ export default function Home() {
     <button
     onClick={handleOtpVer}
     style={otp?.length === 6 ? {background:"#00bae8"} : null}
-    className="bg-sky-300 text-white p-3 mx-24 text-xl my-4 rounded">Submit</button>
+    className="bg-sky-300 text-white p-3 text-xl my-4 rounded w-32">{submitText}</button>
     </div>
  </div>
      </>
