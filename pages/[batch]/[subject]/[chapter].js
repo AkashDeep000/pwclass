@@ -14,7 +14,7 @@ import DownCard from '../../../components/DownCard'
 export default function Home({data}) {
   
   
- //console.log(data.data.data[0].videoDetails)
+ console.log(data.data.data[0].videoDetails)
   return (
     <>
     <Header/>
@@ -98,6 +98,7 @@ const getDownLink = async (url) => {
   console.log(result)
   return `${url.replace(".mpd",".m3u8")}${result.data}`
 }
+
 if (batches?.success) {
 const total = batches.data.length
 let completed = 0
@@ -105,7 +106,7 @@ const getDownLinkLoop = async () => {
   batches.data[completed].videoDetails.downLink = await getDownLink(batches.data[completed].videoDetails.videoUrl)
   completed++
   if (completed < total) {
-    getDownLinkLoop()
+   await getDownLinkLoop()
   }
 }
  
