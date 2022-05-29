@@ -79,7 +79,9 @@ await getBatches();
  console.log(batches)
  let haveToReturn = { props: {}};
  if (batches.error?.status == 401) {
-   removeCookies('access_token', { req, res})
+   removeCookies('access_token',{ req, res})
+   removeCookies('number', { req, res})
+   removeCookies('isSubscribed',{ req, res})
    haveToReturn = {
   redirect: {
     permanent: false,

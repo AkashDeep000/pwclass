@@ -3,7 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { uid } from 'uid';
 import axios from "axios"
-
+import { connectToDatabase } from "../../../util/mongodb";
+import DateDiff from "date-diff"
 import {useState, useRef} from "react"
 
 //import getDownLink from "../../../util/getDownLink"
@@ -24,7 +25,9 @@ export default function Home({data}) {
     <div key={i} >
 
     <div className="rounded w-full p-2 bg-slate-100 grid place-items-center">
+       
        <img className="w-full rounded aspect-video" src={el.videoDetails.image}/>
+
        <div className="rounded w-full pt-4 p-2 bg-slate-100 grid gap-4 grid-cols-[1fr_7rem] place-items-center">
     <p className="w-full text font-bold text-slate-600">{el.topic}</p>
     <DownCard text={el.videoDetails.downLink}/>
@@ -45,7 +48,26 @@ export const getServerSideProps = async ({ req, res, params}) => {
   const { batch, subject, chapter } =  params
    const token = await getCookie('access_token', { req, res});
   console.log(params, token)
- 
+   const number = await getCookie('number', { req, res});
+  console.log(params, token)
+   const isSubscribed = await getCookie('isSubscribed', { req, res});
+  console.log(params, token)
+  
+  const { db } = await connectToDatabase();
+  const user = await db.collection('users')
+         .findOne({
+           number: number
+         })
+    console.log(user)
+  const curDate = new Date()
+   const subDate = user.subDate ? user.subDate : new Date(1999)
+    const diff = new DateDiff(curDate, subDate);
+    
+    const dateDiff = diff.days()
+    const haveSub = dateDiff <=28 ? true : false;
+  if (!haveSub) {
+    removeCookies('isSubscribed', { req, res});
+  }
     let batches;
  let totalPage = 1;
  let currentPage = 1;
@@ -79,11 +101,15 @@ await getBatches();
 
 const getDownLink = async (url) => {
   console.log(url)
+  let modUrl = url;
+  if (url.startsWith("none")) {
+    modUrl = url.substring(4)
+  }
   const data = await axios({
   method: 'post',
   url: 'https://api.penpencil.xyz/v1/files/get-signed-cookie',
   data: {
-    url: url,
+    url: modUrl,
   },
   headers: {'Content-Type':	'application/json',
 'client-type':	'WEB',
@@ -96,7 +122,7 @@ const getDownLink = async (url) => {
    
  const result = data.data
   console.log(result)
-  return `${url.replace(".mpd",".m3u8")}${result.data}`
+  return `${modUrl.replace(".mpd",".m3u8")}${result.data}`
 }
 
 if (batches?.success) {
@@ -104,8 +130,18 @@ const total = batches.data.length
 let completed = 0
 
 await Promise.all(batches.data.map(async (el,i) => {
-  const res = await getDownLink(el.videoDetails.videoUrl)
+  if (haveSub) {
+    const res = await getDownLink(el.videoDetails.videoUrl)
   batches.data[i].videoDetails.downLink = res
+  } else {
+    if (i === 0) {
+      const res = await getDownLink(el.videoDetails.videoUrl)
+  batches.data[i].videoDetails.downLink = res
+    } else {
+      batches.data[i].videoDetails.downLink = "locked"
+    }
+  
+  }
 }));
 /*
  function getDownLinkLoop(){
@@ -124,7 +160,9 @@ await getDownLinkLoop()
  //console.log(batches.data[0].videoDetails)
  let haveToReturn = { props: {}};
  if (batches.error?.status == 401) {
-   removeCookies('access_token', { req, res})
+  removeCookies('access_token', { req, res})
+  removeCookies('number', { req, res})
+  removeCookies('isSubscribed', { req, res})
    haveToReturn = {
   redirect: {
     permanent: false,

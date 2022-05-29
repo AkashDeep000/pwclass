@@ -2,10 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import axios from "axios"
-import {useState, useRef} from "react"
-import { setCookies } from 'cookies-next'
+import {useState, useRef, useEffect} from "react"
+import { checkCookies, setCookies } from 'cookies-next'
 import { useRouter } from 'next/router'
-
 
 import styles from '../styles/Home.module.css'
 import Header from '../components/Header'
@@ -17,6 +16,14 @@ export default function Home() {
   const [isOtpSend, setIsOtpSend] = useState(false)
   const [isOtpVer, setIsOtpVer] = useState(false)
   const router = useRouter()
+  
+ const isLogin = checkCookies("access_token")
+    useEffect(() => {
+   
+   if (isLogin) {
+     router.push('/')
+   }
+    },[])
   
   const handleOtpClick = async() => {
     console.log("Clicked for Otp")
@@ -49,8 +56,12 @@ export default function Home() {
     })
     if (otpRes.data.success) {
       setIsOtpVer(true)
-      console.log("Login Successfull")
+      console.log("Login Successfull", otpRes)
       await setCookies('access_token', otpRes.data.data.access_token)
+      await setCookies('number', otpRes.data.data.number)
+      await setCookies('isSubscribed', otpRes.data.data.isSubscribed)
+      
+      
       router.push("/")
     } else {
       setSubmitText("Submit")

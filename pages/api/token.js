@@ -1,4 +1,5 @@
-
+import { connectToDatabase } from "../../util/mongodb";
+import DateDiff from "date-diff"
 import axios from "axios"
 
 export default async function handler(req, res) {
@@ -21,17 +22,83 @@ try {
     })
   console.log(otpRes.data)
  if (otpRes.data.success) {
-   res.status(200).json({
+  const { db } = await connectToDatabase();
+  const user = await db.collection('users')
+         .findOne({
+           number: number
+         })
+    console.log(user)
+  if (user) {
+    
+   const curDate = new Date()
+   const subDate = user.subDate ? user.subDate : new Date(1999)
+    const diff = new DateDiff(curDate, subDate);
+    
+    const dateDiff = diff.days()
+    console.log(dateDiff)
+    if (dateDiff <= 28) {
+      res.status(200).json({
      success: true,
-     data: otpRes.data.data
+     data: {
+       access_token: otpRes.data.data.access_token,
+       number: number,
+       isSubscribed: true,
+     }
    })
+    } else {
+      res.status(200).json({
+     success: true,
+     data: {
+       access_token: otpRes.data.data.access_token,
+       number: number,
+       isSubscribed: false,
+     }
+   })
+    }
+    
+    /*
+    try {
+    await db.collection('users')
+    .updateOne({_id:user._id}, {$set:{
+      subDate: new Date()
+    }});
+    } catch (e) {
+      console.log(e)
+    }
+    */
+    
+  } else {
+    try {
+       await db.collection('users')
+         .insertOne({
+           number: number,
+           firstName: otpRes.data.data.user.firstName,
+           lastName: otpRes.data.data.user.lastName,
+          email: otpRes.data.data.user.email,
+           subDate: new Date("1999"),
+         })
+      res.status(200).json({
+     success: true,
+     data: {
+       access_token: otpRes.data.data.access_token,
+       number: number,
+       isSubscribed: false,
+     }
+   })   
+         
+    } catch (e) {
+       console.log(e)
+         res.status(200).json({ success: false, error: e})
+    }
+  }
+   
  } else {
   res.status(200).json({ success: false })
 }
 } catch (e) {
-  console.log("error")
+  console.log(e)
   //console.log(e)
-  res.status(200).json({ success: false })
+  res.status(200).json({ success: false, error:e})
 }
 
 }

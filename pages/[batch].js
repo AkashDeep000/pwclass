@@ -6,7 +6,7 @@ import { getCookie, removeCookies } from 'cookies-next'
 import styles from '../styles/Home.module.css'
 import Header from '../components/Header'
 export default function Home({data}) {
-  console.log(data.data.data.subjects[0])
+ // console.log(data.data.data.subjects[0])
   return (
     <>
     <Header/>
@@ -56,6 +56,8 @@ export const getServerSideProps = async ({ req, res, params}) => {
    let haveToReturn = { props: {}};
  if (batches.error?.status == 401) {
   removeCookies('access_token', { req, res})
+  removeCookies('number', { req, res})
+  removeCookies('isSubscribed', { req, res})
    haveToReturn = {
   redirect: {
     permanent: false,
