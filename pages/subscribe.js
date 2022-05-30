@@ -57,7 +57,7 @@ setIsLoading("false")
 			amount: data.amount.toString(),
 			order_id: data.id,
 			name: 'PW class Subscription',
-			description: 'Thank you for nothing. Please give us some money',
+			description: 'Thank you for taking the Subscription',
 			image: '/pwclass-logo.jpg',
 			handler: async function (response) {
 			  setIsLoading("done")
