@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getCookie, removeCookies } from 'cookies-next'
+import { getCookie, removeCookies, setCookies } from 'cookies-next'
 import DateDiff from "date-diff"
 import styles from '../styles/Home.module.css'
 import { connectToDatabase } from "../util/mongodb";

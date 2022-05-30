@@ -46,6 +46,11 @@ export default function Payment() {
 const data = res.data
 		console.log(data)
 setIsLoading("false")
+
+//production key
+//	key: 'rzp_live_EwHLrT8UTaUgoG
+//testing
+//key: 'rzp_test_dhlZTnBnAibhF6',
 		const options = {
 			key: 'rzp_live_EwHLrT8UTaUgoG',
 			currency: data.currency,
@@ -57,6 +62,8 @@ setIsLoading("false")
 			handler: async function (response) {
 			  setIsLoading("done")
 			  await setCookies('isSubscribed', true)
+			  const delay = ms => new Promise(res => setTimeout(res, ms));
+			  await delay(5000)
 			  router.push("/")
         
 			  /*
@@ -126,7 +133,7 @@ export const getServerSideProps = async ({ req, res }) => {
    return  {
   redirect: {
     permanent: false,
-    destination: "/",
+    destination: "/login",
   },
   props:{},
 }
