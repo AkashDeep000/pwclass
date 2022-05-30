@@ -21,7 +21,7 @@ export default function Payment() {
 		script.onload = () => {
 			resolve(true)
 		}
-		script.onerror = () => {
+		script.onerror = () => { 
 			resolve(false)
 		}
 		document.body.appendChild(script)
@@ -47,13 +47,13 @@ const data = res.data
 		console.log(data)
 setIsLoading("false")
 		const options = {
-			key: 'rzp_test_dhlZTnBnAibhF6',
+			key: 'rzp_live_EwHLrT8UTaUgoG',
 			currency: data.currency,
 			amount: data.amount.toString(),
 			order_id: data.id,
-			name: 'Donation',
+			name: 'PW class Subscription',
 			description: 'Thank you for nothing. Please give us some money',
-			image: '/vercel.svg',
+			image: '/pwclass-logo.jpg',
 			handler: async function (response) {
 			  setIsLoading("done")
 			  await setCookies('isSubscribed', true)
@@ -68,9 +68,9 @@ setIsLoading("false")
 			},
 			
 			prefill: {
-				name: "",
+				full_name: "",
 				email: "",
-				phone_number: number
+				phone: number
 			}
 		}
 		const paymentObject = new window.Razorpay(options)
@@ -91,7 +91,7 @@ setIsLoading("false")
      <div className="bg-slate-100 rounded text-center p-8">
 
         <span className="rounded text-sky-500  text-8xl font-bold p-4"> 
-     ₹199
+     ₹1
     </span>
     </div>
           <div className="text-slate-500 text-center text-xl font-bold p-4"> 
@@ -126,7 +126,7 @@ export const getServerSideProps = async ({ req, res }) => {
    return  {
   redirect: {
     permanent: false,
-    destination: "/login",
+    destination: "/",
   },
   props:{},
 }

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { getCookie, removeCookies } from 'cookies-next'
-import styles from '../styles/Home.module.css'
+
 import Header from '../components/Header'
 export default function Home({data}) {
  // console.log(data.data.data.subjects[0])

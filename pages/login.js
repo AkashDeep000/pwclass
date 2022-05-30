@@ -72,7 +72,8 @@ export default function Home() {
   return (
     <>
     <Header/>
-    <div className="px-8 pt-8 grid center">
+    <div className="px-8 pt-3 grid center">
+      <div className=" w-full text-2xl font-bold text-slate-600 pb-8 mt-4">First Loging with Your Physics Wallah Account.</div>
     <label className="w-full  text-xl block text-sky-500">
     Phone Number:
     <input

@@ -7,12 +7,12 @@ import { connectToDatabase } from "../../../util/mongodb";
 export default async function handler(req, res) {
   if (req.method === 'POST') {
   const payment_capture = 1
-	const amount = 199
+	const amount = 1
 	const currency = 'INR'
 	
 const razorpay = new Razorpay({
-	key_id: 'rzp_test_dhlZTnBnAibhF6',
-	key_secret: 'V088sC8GxHmOjwdv9K3VLkIn'
+	key_id: 'rzp_live_EwHLrT8UTaUgoG',
+	key_secret: 'bYut9jQaNdDb8S1bIQXrnCOw'
 })
 	const options = {
 		amount: amount * 100,

@@ -8,7 +8,7 @@ import DateDiff from "date-diff"
 import {useState, useRef} from "react"
 
 //import getDownLink from "../../../util/getDownLink"
-import { getCookie, removeCookies } from 'cookies-next'
+import { getCookie, setCookies, removeCookies } from 'cookies-next'
 import styles from '../../../styles/Home.module.css'
 import Header from '../../../components/Header'
 import DownCard from '../../../components/DownCard'
@@ -19,7 +19,7 @@ export default function Home({data}) {
   return (
     <>
     <Header/>
-    <div className="text-center w-full text-2xl font-bold text-slate-600 p-2 mt-4">Videos To Download</div>
+    <div className="text-center w-full text-2xl font-bold text-slate-600 p-2 mt-4"> Links for Download</div>
     <div className="grid p-3 gap-6 shadow-2xl">
     {data.data.data.map((el, i) => (
     <div key={i} >
@@ -49,9 +49,10 @@ export const getServerSideProps = async ({ req, res, params}) => {
    const token = await getCookie('access_token', { req, res});
   console.log(params, token)
    const number = await getCookie('number', { req, res});
-  console.log(params, token)
+  
+  
    const isSubscribed = await getCookie('isSubscribed', { req, res});
-  console.log(params, token)
+  
   
   const { db } = await connectToDatabase();
   const user = await db.collection('users')
@@ -67,6 +68,8 @@ export const getServerSideProps = async ({ req, res, params}) => {
     const haveSub = dateDiff <=28 ? true : false;
   if (!haveSub) {
     removeCookies('isSubscribed', { req, res});
+  } else {
+    setCookies("isSubscribed", true, {req, res})
   }
     let batches;
  let totalPage = 1;

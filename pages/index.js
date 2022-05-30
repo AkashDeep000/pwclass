@@ -2,7 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getCookie, removeCookies } from 'cookies-next'
+import DateDiff from "date-diff"
 import styles from '../styles/Home.module.css'
+import { connectToDatabase } from "../util/mongodb";
 import Header from '../components/Header'
 export default function Home({data}) {
   console.log(data.data.data[0])
@@ -29,6 +31,10 @@ export default function Home({data}) {
 
 export const getServerSideProps = async ({ req, res }) => {
    const token = await getCookie('access_token', { req, res});
+    
+   const number = await getCookie('number', { req, res});
+   const isSubscribed = await getCookie('isSubscribed', { req, res});
+  
    if (!token) {
    return  {
   redirect: {
@@ -62,6 +68,23 @@ export const getServerSideProps = async ({ req, res }) => {
   props:{},
 }
  } else if (batches.success == true){
+     const { db } = await connectToDatabase();
+  const user = await db.collection('users')
+         .findOne({
+           number: number
+         })
+    console.log(user)
+  const curDate = new Date()
+   const subDate = user.subDate ? user.subDate : new Date(1999)
+    const diff = new DateDiff(curDate, subDate);
+    
+    const dateDiff = diff.days()
+    const haveSub = dateDiff <=28 ? true : false;
+  if (!haveSub) {
+    removeCookies('isSubscribed', { req, res});
+  } else {
+    setCookies("isSubscribed", true, {req, res})
+  }
   haveToReturn = { props: {data:{token: token,data:batches}}};
 }
 console.log(haveToReturn)
