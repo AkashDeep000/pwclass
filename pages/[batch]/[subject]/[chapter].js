@@ -30,7 +30,13 @@ export default function Home({data}) {
 
        <div className="rounded w-full pt-4 p-2 bg-slate-100 grid gap-4 grid-cols-[1fr_7rem] place-items-center">
     <p className="w-full text font-bold text-slate-600">{el.topic}</p>
+    <div>
+    <div>Video Link</div>
     <DownCard text={el.videoDetails.downLink}/>
+    <br />
+        <div>Thumbnail Link</div>
+    <DownCard text={el.videoDetails.image}/>
+    </div>
     </div>
     
     </div>

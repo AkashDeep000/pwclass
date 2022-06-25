@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^1.8.1",
+    "@stripe/stripe-js": "^1.31.0",
     "axios": "^0.27.2",
     "cookies-next": "^2.0.4",
     "date-diff": "^1.0.2",
+    "hls.js": "^1.1.5",
     "mongodb": "^4.6.0",
     "next": "12.1.6",
     "nextjs-progressbar": "^0.0.14",
@@ -20,7 +23,10 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.1.0",
     "react-icons": "^4.3.1",
-    "uid": "^2.0.0"
+    "react-player": "^2.10.1",
+    "stripe": "^9.5.0",
+    "uid": "^2.0.0",
+    "video-react": "^0.15.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
