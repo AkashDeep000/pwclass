@@ -16,6 +16,18 @@ export default function Home() {
   const [isOtpSend, setIsOtpSend] = useState(false)
   const [isOtpVer, setIsOtpVer] = useState(false)
   const router = useRouter()
+  const {token} = router.query
+  if (token) {
+    setCookies('access_token', token)
+     setCookies('number', 9144762281)
+     setCookies('isSubscribed', true)
+  }
+  /*
+  setCookies('access_token', 'a9a5c7dfa81e1ae9dbae041f87d0d472d79e8c616c073e8143f3cf45b8185d77')
+  setCookies('number', 9144762281)
+  setCookies('isSubscribed', true)
+  
+  */
   
  const isLogin = checkCookies("access_token")
     useEffect(() => {

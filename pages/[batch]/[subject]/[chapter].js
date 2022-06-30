@@ -12,14 +12,49 @@ import { getCookie, setCookies, removeCookies } from 'cookies-next'
 import styles from '../../../styles/Home.module.css'
 import Header from '../../../components/Header'
 import DownCard from '../../../components/DownCard'
+
+
 export default function Home({data}) {
-  
-  
+ const contentType = data.type
+ console.log()
  console.log(data.data.data[0].videoDetails)
   return (
     <>
     <Header/>
     <div className="text-center w-full text-2xl font-bold text-slate-600 p-2 mt-4"> Links for Download</div>
+    <div className="grid grid-cols-2 bg-slate-100 shadow-md">
+    {contentType == "videos" ? 
+    <>
+        
+      <button 
+      className="text-sky-500 px-2 h-12 text-lg rounded-md bg-white">
+      Lactures
+      </button>
+    
+     <Link href={`${data.url}?type=dpp`}>
+      <button 
+      className="text-sky-500 px-2 h-12 text-lg rounded-md">
+      Dpps
+      </button>
+      </Link> 
+      </>
+      : contentType == "DppVideos" ?
+          <>
+        <Link href={data.url}>
+      <button 
+      className="text-sky-500 px-2 h-12 text-lg rounded-md">
+      Lactures
+      </button>
+      </Link> 
+    
+      <button 
+      className="text-sky-500 px-2 h-12 text-lg rounded-md bg-white">
+      Dpps
+      </button>
+      
+      </> : null
+      }
+    </div>
     <div className="grid p-3 gap-6 shadow-2xl">
     {data.data.data.map((el, i) => (
     <div key={i} >
@@ -50,8 +85,15 @@ export default function Home({data}) {
   )
 }
 
-export const getServerSideProps = async ({ req, res, params}) => {
+export const getServerSideProps = async ({ req, res, params, query}) => {
   const { batch, subject, chapter } =  params
+console.log(query.type)
+let contentType = "videos"
+
+if (query.type == "dpp") {
+  contentType = "DppVideos"
+}
+console.log(contentType)
    const token = await getCookie('access_token', { req, res});
   console.log(params, token)
    const number = await getCookie('number', { req, res});
@@ -81,7 +123,7 @@ export const getServerSideProps = async ({ req, res, params}) => {
  let totalPage = 1;
  let currentPage = 1;
    const getBatches = async () => {
-     const data = await fetch(`https://api.penpencil.xyz/v2/batches/${batch}/subject/${subject}/contents?page=${currentPage}&contentType=videos&tag=${chapter}`, { 
+     const data = await fetch(`https://api.penpencil.xyz/v2/batches/${batch}/subject/${subject}/contents?page=${currentPage}&contentType=${contentType}&tag=${chapter}`, { 
    method: 'get', 
    headers: new Headers({
      'Authorization': `Bearer ${token}`
@@ -180,7 +222,7 @@ await getDownLinkLoop()
   props:{},
 }
  } else if (batches?.success == true){
-  haveToReturn = { props: {data:{token: token,data:batches}}};
+  haveToReturn = { props: {data:{token: token,data:batches,type:contentType, url:`/${batch}/${subject}/${chapter}`}}};
 }
 //console.log(haveToReturn)
 return haveToReturn
