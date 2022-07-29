@@ -1,0 +1,59 @@
+{
+    "entity": "event",
+    "account_id": "acc_JatpWJizQA5kj8",
+    "event": "payment.captured",
+    "contains": [
+        "payment"
+    ],
+    "payload": {
+        "payment": {
+            "entity": {
+                "id": "pay_Jb3agj8rGPiULi",
+                "entity": "payment",
+                "amount": 19900,
+                "currency": "INR",
+                "status": "captured",
+                "order_id": "order_Jb3aUtnDbHa0ig",
+                "invoice_id": null,
+                "international": false,
+                "method": "card",
+                "amount_refunded": 0,
+                "refund_status": null,
+                "captured": true,
+                "description": "Thank you for nothing. Please give us some money",
+                "card_id": "card_Jb3agokwNhRzDY",
+                "card": {
+                    "id": "card_Jb3agokwNhRzDY",
+                    "entity": "card",
+                    "name": "A D",
+                    "last4": "1111",
+                    "network": "Visa",
+                    "type": "debit",
+                    "issuer": null,
+                    "international": false,
+                    "emi": false,
+                    "sub_type": "consumer",
+                    "token_iin": null
+                },
+                "bank": null,
+                "wallet": null,
+                "vpa": null,
+                "email": "sdfdsjfh2@ndsfdf.com",
+                "contact": "+917548945778",
+                "notes": [],
+                "fee": 398,
+                "tax": 0,
+                "error_code": null,
+                "error_description": null,
+                "error_source": null,
+                "error_step": null,
+                "error_reason": null,
+                "acquirer_data": {
+                    "auth_code": "689080"
+                },
+                "created_at": 1653830277
+            }
+        }
+    },
+    "created_at": 1653830283
+}
